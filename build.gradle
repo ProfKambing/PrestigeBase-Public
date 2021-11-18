@@ -4,14 +4,24 @@ buildscript {
             url = 'https://maven.minecraftforge.net' }
         mavenCentral()
     }
+
+maven {
+            name = 'SpongePowered'
+            url = 'https://repo.spongepowered.org/maven'
+        }
+
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-    }
+    classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+}
 }
 
 apply plugin: 'net.minecraftforge.gradle'
 
-group = 'dev.prestige.bade'
+apply plugin: 'org.spongepowered.mixin'
+
+
+group = 'dev.prestige.base'
 version = '1.0'
 
 java {
@@ -20,29 +30,11 @@ java {
 }
 
 minecraft {
-    mappings channel: 'stable', version: '39-1.12'
-    runs {
-        client {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            mods {
-                prestigebase {
-                    source sourceSets.main
-                }
-            }
-        }
-        server {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            mods {
-                prestigebase {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
+    version = project.forgeVersion
+    runDir = 'run'
+    mappings = project.mcpVersion
+    coreMod = 'b'
+    makeObfSourceJar = false
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
